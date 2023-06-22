@@ -8,6 +8,7 @@ var fetchuser = require('../middleware/fetchuser')
 
 const JWT_SCCRET = "ThanujaSorunAmma";
 
+
 //Route 1:  Create a user using: POST "/api/auth/createuser".  No login required
 router.post(
   "/createuser",
@@ -46,8 +47,9 @@ router.post(
           id: user.id,
         },
       };
+      //console.log('data=>'+data);
       const authtoken = jwt.sign(data, JWT_SCCRET);
-      //console.log(jwtDate)
+      console.log(authtoken)
 
       res.json({ authtoken });
       //res.json({user})
@@ -75,7 +77,7 @@ router.post(
     const { email, password } = req.body;
     console.log("email==>", req.body);
     try {
-      let user = await User.findOne({ email });
+      let user =   User.findOne({ email });
       console.log("user=>" + user);
       if (!user) {
         return res
@@ -114,10 +116,28 @@ router.post('/getuser',fetchuser, async(req,res)=>{
     } 
     catch (error) {
         console.log(error.message);
-        res.status(500).send("Internal Server Error");
-        
+        res.status(500).send("Internal Server Error");      
     }
 })
 
 
 module.exports = router;
+
+
+
+// Simply tried.
+// router.post('/',
+// [
+//   body("name", "Enter a Valid Name thanuja").isLength({ min: 3 }),
+//   body("email", "Enter a valid email").isEmail(),
+//   body("password", "Password length should be min 3").isLength({ min: 3 }),
+// ],(req,res)=>{
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ errors: errors.array() });
+//   }
+//   // console.log(req.body);
+//    const user = User(req.body);
+//    user.save()
+//   res.send(req.body);
+// })
